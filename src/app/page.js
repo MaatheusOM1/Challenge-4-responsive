@@ -3,14 +3,36 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import './forms.css';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [erroLogin, setErroLogin] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica de login aqui, você pode enviar as informações para a API, por exemplo
-    console.log('Logando:', { email, senha });
+
+    try {
+      const resposta = await fetch('#', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      if (resposta.ok) {
+        console.log('Login bem-sucedido!');
+        onLogin();
+      } else {
+        const erroJson = await resposta.json();
+        const mensagemErro = erroJson ? erroJson.mensagem : 'Erro desconhecido ao realizar login';
+        console.error('Erro ao realizar login:', resposta.status, mensagemErro);
+        setErroLogin(mensagemErro);
+      }
+    } catch (erro) {
+      console.error('Erro na requisição de login:', erro);
+      setErroLogin('Erro desconhecido ao realizar login');
+    }
   };
 
   return (
@@ -25,11 +47,10 @@ const Login = () => {
           Senha:
           <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} />
         </label>
-        <Link href="/Home">
-            <button type="submit">Entrar</button>
-        </Link>
+        {erroLogin && <p className="mensagem-erro">{erroLogin}</p>}
+        <button type="submit">Entrar</button>
         <Link href="/Cadastro">
-            <button type="submit">Cadastre-se</button>
+          <button type="button">Cadastre-se</button>
         </Link>
       </form>
     </div>

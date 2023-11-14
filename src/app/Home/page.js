@@ -176,12 +176,12 @@ export default function Home() {
               <div className="card__descricao-integrantes">
                   <div className="descricao__integrantes">
                       <h3 className="descricao__nome">Github</h3>
-                      <h2 className="descricao__rm">https://github.com/MaatheusOM1/Challenge-3-React</h2>
+                      <h2 className="descricao__rm">https://github.com/MaatheusOM1/Challenge-4-responsive</h2>
                       <p className="descricao__funcao">Link para o repósitorio:</p>
                   </div>
               </div>
               <div className="card__botoes-integrantes">
-                  <a href="https://github.com/MaatheusOM1/Challenge-3-React" className="botoes__ancora-integrantes">Repositório</a>
+                  <a href="https://github.com/MaatheusOM1/Challenge-4-responsive" className="botoes__ancora-integrantes">Repositório</a>
               </div>
           </div>
       </footer>

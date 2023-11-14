@@ -7,10 +7,42 @@ const Cadastro = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica de cadastro aqui, você pode enviar as informações para a API, por exemplo
-    console.log('Cadastrando:', { nome, email, senha });
+
+    try {
+      const resposta = await fetch('http://localhost:8080/cadastro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nome, email, senha }),
+      });
+
+      if (resposta.ok) {
+        console.log('Usuário cadastrado com sucesso!');
+        setNome('');
+        setEmail('');
+        setSenha('');
+      } else {
+        const erroJson = await resposta.json();
+        const mensagemErro = erroJson ? erroJson.mensagem : 'Erro desconhecido ao cadastrar usuário';
+        console.error('Erro ao cadastrar usuário:', resposta.status, mensagemErro);
+
+        alert(`Erro ao cadastrar usuário: ${mensagemErro}`);
+      }
+    } catch (erro) {
+      console.error('Erro na requisição de cadastro:', erro);
+
+      let mensagemErroRequisicao = 'Erro desconhecido na requisição de cadastro';
+      if (erro instanceof TypeError && erro.message.includes('Failed to fetch')) {
+        mensagemErroRequisicao = 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
+      }
+
+      console.error(mensagemErroRequisicao);
+
+      alert(mensagemErroRequisicao);
+    }
   };
 
   return (
@@ -36,3 +68,4 @@ const Cadastro = () => {
 };
 
 export default Cadastro;
+
